@@ -217,6 +217,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("home");
   const [formStatus, setFormStatus] = useState("");
+  const [formSending, setFormSending] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -235,19 +236,54 @@ export default function App() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const first = data.get("firstName");
-    const last = data.get("lastName");
-    const email = data.get("email");
-    const message = data.get("message");
-    const subject = encodeURIComponent(`Portfolio inquiry from ${first} ${last}`);
-    const body = encodeURIComponent(
-      `${message}\n\n— ${first} ${last}\n${email}`
-    );
-    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
-    setFormStatus("Opening your email client…");
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const first = String(data.get("firstName") || "").trim();
+    const last = String(data.get("lastName") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const message = String(data.get("message") || "").trim();
+
+    setFormSending(true);
+    setFormStatus("Sending your message…");
+
+    try {
+      const res = await fetch(
+        `https://formsubmit.co/ajax/${profile.email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            name: `${first} ${last}`,
+            email,
+            message,
+            _subject: `Portfolio inquiry from ${first} ${last}`,
+            _template: "table",
+            _captcha: "false",
+          }),
+        }
+      );
+
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(result.message || "Failed to send");
+      }
+
+      setFormStatus(
+        "Message sent. Check your inbox — if this is the first time, confirm the FormSubmit email so messages start arriving."
+      );
+      form.reset();
+    } catch {
+      setFormStatus(
+        `Could not send right now. Email me directly at ${profile.email}`
+      );
+    } finally {
+      setFormSending(false);
+    }
   };
 
   return (
@@ -920,8 +956,13 @@ export default function App() {
                     Usually replies within 24–48 hours. Or email directly:{" "}
                     <a href={`mailto:${profile.email}`}>{profile.email}</a>
                   </p>
-                  <button className="btn btn-outline" type="submit">
-                    Send Message <ArrowRight size={16} />
+                  <button
+                    className="btn btn-outline"
+                    type="submit"
+                    disabled={formSending}
+                  >
+                    {formSending ? "Sending…" : "Send Message"}{" "}
+                    <ArrowRight size={16} />
                   </button>
                 </div>
                 {formStatus && (
