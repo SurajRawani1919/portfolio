@@ -15,6 +15,7 @@ export const profile = {
   photo: import.meta.env.BASE_URL + "photo.png",
   heroPhoto: import.meta.env.BASE_URL + "media/hero-portrait.jpg",
   heroVideo: import.meta.env.BASE_URL + "media/hero-intro.mp4?v=6",
+  resume: import.meta.env.BASE_URL + "Suraj_Kumar_Rawani_Resume.pdf",
 };
 
 export const navLinks = [

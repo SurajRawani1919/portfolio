@@ -296,7 +296,27 @@ export default function App() {
                 </a>
                 <a
                   className="btn btn-outline"
-                  href={`mailto:${profile.email}?subject=Resume%20request`}
+                  href={profile.resume}
+                  download="Suraj_Kumar_Rawani_Resume.pdf"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    const resumeUrl = profile.resume;
+                    try {
+                      const res = await fetch(resumeUrl);
+                      if (!res.ok) throw new Error("Resume not found");
+                      const blob = await res.blob();
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = "Suraj_Kumar_Rawani_Resume.pdf";
+                      document.body.appendChild(a);
+                      a.click();
+                      a.remove();
+                      URL.revokeObjectURL(url);
+                    } catch {
+                      window.open(resumeUrl, "_blank", "noopener,noreferrer");
+                    }
+                  }}
                 >
                   <Download size={16} /> Resume
                 </a>
