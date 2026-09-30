@@ -14,7 +14,8 @@ export const profile = {
   instagram: "https://www.instagram.com/suraj_singh1919/",
   photo: import.meta.env.BASE_URL + "photo.png",
   heroPhoto: import.meta.env.BASE_URL + "media/hero-portrait.jpg",
-  heroVideo: import.meta.env.BASE_URL + "media/hero-intro.mp4?v=9",
+  heroVideo: import.meta.env.BASE_URL + "media/hero-intro.mp4?v=10",
+  heroVoice: import.meta.env.BASE_URL + "media/intro-voice.mp3?v=10",
   resume: import.meta.env.BASE_URL + "Suraj_Kumar_Rawani_Resume.pdf",
 };
 

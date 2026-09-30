@@ -126,21 +126,45 @@ function PhotoSlot({ className = "", src }) {
 
 function HeroMedia() {
   const videoRef = useRef(null);
+  const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
+
+  const stopAll = () => {
+    const video = videoRef.current;
+    const audio = audioRef.current;
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+    setPlaying(false);
+  };
 
   const toggle = async () => {
     const video = videoRef.current;
-    if (!video) return;
-    if (video.paused) {
-      try {
-        await video.play();
-        setPlaying(true);
-      } catch {
-        setPlaying(false);
-      }
-    } else {
-      video.pause();
-      setPlaying(false);
+    const audio = audioRef.current;
+    if (!video || !audio) return;
+
+    if (playing) {
+      stopAll();
+      return;
+    }
+
+    try {
+      // Video is muted; voice plays from a dedicated audio file (more reliable on phones)
+      video.muted = true;
+      video.currentTime = 0;
+      audio.muted = false;
+      audio.volume = 1;
+      audio.currentTime = 0;
+
+      await Promise.all([video.play(), audio.play()]);
+      setPlaying(true);
+    } catch {
+      stopAll();
     }
   };
 
@@ -152,11 +176,22 @@ function HeroMedia() {
         className="hero-photo hero-video"
         src={profile.heroVideo}
         poster={profile.heroPhoto}
+        muted
         playsInline
         preload="auto"
-        onEnded={() => setPlaying(false)}
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
+        onEnded={() => {
+          if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+          }
+          setPlaying(false);
+        }}
+      />
+      <audio
+        ref={audioRef}
+        src={profile.heroVoice}
+        preload="auto"
+        onEnded={stopAll}
       />
       <button
         type="button"
