@@ -271,11 +271,20 @@ export const softSkills = [
 
 export const certifications = [
   {
-    title: "Databricks Fundamentals Accreditation",
-    issuer: "Databricks",
+    title: "Fine-Tuning for LLMs: from Beginner to Advanced",
+    issuer: "LinkedIn · March 2026",
   },
   {
-    title: "Advanced LLMs with Retrieval Augmented Generation (RAG)",
-    issuer: "Certification",
+    title:
+      "Advanced LLMs with Retrieval Augmented Generation (RAG): Practical Projects for AI Applications",
+    issuer: "LinkedIn · February 2026",
+  },
+  {
+    title: "Intro to Snowflake for Devs, Data Scientists, Data Engineers",
+    issuer: "LinkedIn · February 2026",
+  },
+  {
+    title: "Databricks Fundamentals Accreditation",
+    issuer: "Databricks",
   },
 ];
