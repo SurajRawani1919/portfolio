@@ -342,7 +342,12 @@ export default function App() {
                 Hi, I&apos;m {profile.shortName},
               </h1>
               <p className="hero-role">{profile.role}</p>
-              <p className="hero-bio">{profile.summary}</p>
+              <p className="hero-bio">
+                I build <strong>Generative AI</strong> applications,{" "}
+                <strong>RAG</strong> pipelines, <strong>LLM</strong> evaluation
+                workflows, and backend services with <strong>Python</strong>,{" "}
+                <strong>LangChain</strong>, and <strong>FastAPI</strong>.
+              </p>
               <div className="hero-actions">
                 <a className="btn btn-solid" href="#projects">
                   View My Work
