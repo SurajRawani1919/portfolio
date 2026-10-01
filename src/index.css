@@ -1704,6 +1704,14 @@ textarea {
   letter-spacing: 0.02em;
 }
 
+.avail-cities {
+  display: inline-block;
+  margin-top: 0.2rem;
+  color: #e8e8e8;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
 .footer-bottom {
   margin-top: 2rem;
   display: flex;

@@ -971,7 +971,9 @@ export default function App() {
                   <strong>Availability</strong>
                   Open to AI/ML roles & collaborations
                   <br />
-                  {profile.openLocations}
+                  <span className="avail-cities">
+                    Open in: {profile.openLocations}
+                  </span>
                   <br />
                   {profile.phone}
                 </div>
