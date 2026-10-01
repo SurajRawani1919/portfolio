@@ -3,6 +3,8 @@ export const profile = {
   shortName: "Suraj",
   role: "AI/ML Engineer",
   location: "New Delhi, India",
+  openLocations:
+    "Pune · Bangalore · Noida · Delhi · Gurugram · Hyderabad · Chennai",
   email: "rawanisuraj1919@gmail.com",
   phone: "+91 7061205601",
   summary:

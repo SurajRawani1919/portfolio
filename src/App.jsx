@@ -971,7 +971,7 @@ export default function App() {
                   <strong>Availability</strong>
                   Open to AI/ML roles & collaborations
                   <br />
-                  {profile.location}
+                  {profile.openLocations}
                   <br />
                   {profile.phone}
                 </div>
