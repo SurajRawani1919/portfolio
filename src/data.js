@@ -11,7 +11,6 @@ export const profile = {
     "Hi, my name is SURAJ KUMAR RAWANI, an AI/ML Engineer based in New Delhi, India, dedicated to crafting clean, functional, and highly scalable Generative AI applications.",
   linkedin: "https://www.linkedin.com/in/suraj-kumar-rawani-0483b7298/",
   github: "https://github.com/SurajRawani1919",
-  instagram: "https://www.instagram.com/suraj_singh1919/",
   photo: import.meta.env.BASE_URL + "photo.png",
   heroPhoto: import.meta.env.BASE_URL + "media/hero-portrait.jpg?v=16",
   heroVideo: import.meta.env.BASE_URL + "media/hero-intro.mp4?v=16",
