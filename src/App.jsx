@@ -126,45 +126,34 @@ function PhotoSlot({ className = "", src }) {
 
 function HeroMedia() {
   const videoRef = useRef(null);
-  const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
 
-  const stopAll = () => {
+  const stop = () => {
     const video = videoRef.current;
-    const audio = audioRef.current;
     if (video) {
       video.pause();
       video.currentTime = 0;
-    }
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
     }
     setPlaying(false);
   };
 
   const toggle = async () => {
     const video = videoRef.current;
-    const audio = audioRef.current;
-    if (!video || !audio) return;
+    if (!video) return;
 
     if (playing) {
-      stopAll();
+      stop();
       return;
     }
 
     try {
-      // Video is muted; voice plays from a dedicated audio file (more reliable on phones)
-      video.muted = true;
+      video.muted = false;
+      video.volume = 1;
       video.currentTime = 0;
-      audio.muted = false;
-      audio.volume = 1;
-      audio.currentTime = 0;
-
-      await Promise.all([video.play(), audio.play()]);
+      await video.play();
       setPlaying(true);
     } catch {
-      stopAll();
+      stop();
     }
   };
 
@@ -176,22 +165,11 @@ function HeroMedia() {
         className="hero-photo hero-video"
         src={profile.heroVideo}
         poster={profile.heroPhoto}
-        muted
         playsInline
         preload="auto"
-        onEnded={() => {
-          if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
-          }
-          setPlaying(false);
-        }}
-      />
-      <audio
-        ref={audioRef}
-        src={profile.heroVoice}
-        preload="auto"
-        onEnded={stopAll}
+        onEnded={stop}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
       />
       <button
         type="button"
@@ -244,43 +222,50 @@ export default function App() {
     const last = String(data.get("lastName") || "").trim();
     const email = String(data.get("email") || "").trim();
     const message = String(data.get("message") || "").trim();
+    const fullName = `${first} ${last}`.trim();
 
     setFormSending(true);
     setFormStatus("Sending your message…");
 
     try {
-      const res = await fetch(
-        `https://formsubmit.co/ajax/${profile.email}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            name: `${first} ${last}`,
-            email,
-            message,
-            _subject: `Portfolio inquiry from ${first} ${last}`,
-            _template: "table",
-            _captcha: "false",
-          }),
-        }
-      );
+      if (!profile.web3formsAccessKey) {
+        throw new Error("SETUP_REQUIRED");
+      }
+
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: profile.web3formsAccessKey,
+          name: fullName,
+          email,
+          message,
+          subject: `Portfolio inquiry from ${fullName}`,
+          from_name: "Portfolio Contact Form",
+          replyto: email,
+        }),
+      });
 
       const result = await res.json().catch(() => ({}));
-      if (!res.ok) {
+      if (!res.ok || result.success === false) {
         throw new Error(result.message || "Failed to send");
       }
 
-      setFormStatus(
-        "Message sent. Check your inbox — if this is the first time, confirm the FormSubmit email so messages start arriving."
-      );
+      setFormStatus("Message sent successfully. I will reply soon.");
       form.reset();
-    } catch {
-      setFormStatus(
-        `Could not send right now. Email me directly at ${profile.email}`
-      );
+    } catch (err) {
+      if (String(err?.message) === "SETUP_REQUIRED") {
+        setFormStatus(
+          "Contact form setup needed: get a free Access Key from web3forms.com and share it to finish setup."
+        );
+      } else {
+        setFormStatus(
+          `Could not send right now. Email me directly at ${profile.email}`
+        );
+      }
     } finally {
       setFormSending(false);
     }
