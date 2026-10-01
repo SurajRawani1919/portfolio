@@ -14,7 +14,7 @@ export const profile = {
   instagram: "https://www.instagram.com/suraj_singh1919/",
   photo: import.meta.env.BASE_URL + "photo.png",
   heroPhoto: import.meta.env.BASE_URL + "media/hero-portrait.jpg",
-  heroVideo: import.meta.env.BASE_URL + "media/hero-intro.mp4?v=13",
+  heroVideo: import.meta.env.BASE_URL + "media/hero-intro.mp4?v=14",
   resume: import.meta.env.BASE_URL + "Suraj_Kumar_Rawani_Resume.pdf",
   // Free key from https://web3forms.com (tied to profile.email)
   web3formsAccessKey: "",
