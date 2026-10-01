@@ -1712,16 +1712,6 @@ textarea {
   line-height: 1.55;
 }
 
-.footer-bottom {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  font-size: 0.82rem;
-  color: #737373;
-}
-
 /* ——— RESPONSIVE ——— */
 @media (max-width: 960px) {
   .nav-inner {

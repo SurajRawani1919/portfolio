@@ -978,10 +978,6 @@ export default function App() {
                   {profile.phone}
                 </div>
               </div>
-              <div className="footer-bottom">
-                <span>© {new Date().getFullYear()} {profile.name}</span>
-                <span>Built to match the portfolio reel aesthetic</span>
-              </div>
             </footer>
           </div>
         </section>
